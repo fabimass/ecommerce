@@ -84,3 +84,13 @@ def new(request):
         return render(request, "auctions/new.html", {
             "form": ListingForm()
         })
+
+
+def listing(request, id):
+    try:
+        listing = Listing.objects.get(pk=id)
+        return render(request, "auctions/listing.html", {
+            "listing": listing
+        })
+    except:
+        return render(request, "auctions/404.html")

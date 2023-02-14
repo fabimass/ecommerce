@@ -1,0 +1,28 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="jumbotron">
+        <h1 class="display-4">{{ listing.title }}</h1>
+        <p class="lead">$ {{ listing.price }}</p>
+        <hr class="my-4">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-3">
+                    {% if listing.image %}
+                        <img class="img-fluid" src={{ listing.image }} alt="User provided image">
+                    {% else %}  
+                        <img class="img-fluid" src="{% static '/auctions/question_mark.png' %}" alt="Question mark">
+                    {% endif %}
+                </div>
+                <div class="col-9">
+                    <p>{{ listing.description }}</p>
+                </div>
+            </div>
+        </div>
+        <p class="lead">
+          <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+        </p>
+      </div>
+
+{% endblock %}
