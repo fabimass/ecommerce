@@ -6,14 +6,15 @@ class User(AbstractUser):
     pass
 
 class Listing(models.Model):
-    title = models.CharField(max_length=64, default="GenericItem")
-    price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    description = models.CharField(max_length=500, blank=True)
-    category = models.CharField(max_length=64, blank=True)
-    image = models.URLField(blank=True)
+    title = models.CharField(max_length=64)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    description = models.CharField(max_length=500)
+    category = models.CharField(max_length=64)
+    image = models.URLField()
+    listed_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings")
 
     def __str__(self):
-        return f"{self.id}: {self.name} (${self.price})"
+        return f"{self.id}: {self.title} - listed by {self.listed_by}"
 
 class Bid(models.Model):
     bid = models.DecimalField(max_digits=10, decimal_places=2)
