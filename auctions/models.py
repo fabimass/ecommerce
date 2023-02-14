@@ -11,8 +11,9 @@ class Listing(models.Model):
     description = models.CharField(max_length=500)
     category = models.CharField(max_length=64, default="Other")
     image = models.URLField(blank=True)
-    listed_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings")
+    listed_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings_owned")
     is_active = models.BooleanField(default=True)
+    users_watching = models.ManyToManyField(User, blank=True, related_name="listings_watched")
 
     def __str__(self):
         return f"{self.id}: {self.title} - listed by {self.listed_by}"

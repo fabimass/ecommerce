@@ -95,3 +95,18 @@ def listing(request, id):
         })
     except:
         return render(request, "auctions/404.html")
+
+
+def watchlist(request):
+    listings = Listing.objects.filter(is_active=True)
+    return render(request, "auctions/watchlist.html", {
+        "listings": listings
+    })
+
+
+def watch(request, id):
+    if request.method == "POST":
+        listing = Listing.objects.get(pk=id)
+        listing.users_watching.add(request.user)
+
+    return HttpResponseRedirect(reverse("watchlist"))

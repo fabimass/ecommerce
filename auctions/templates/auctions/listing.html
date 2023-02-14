@@ -6,7 +6,7 @@
         <h1 class="display-4">{{ listing.title }}</h1>
         <p class="lead">$ {{ listing.price }}</p>
         <hr class="my-4">
-        <div class="container-fluid">
+        <div class="container-fluid my-5">
             <div class="row">
                 <div class="col-3">
                     {% if listing.image %}
@@ -21,7 +21,12 @@
             </div>
         </div>
         <p class="lead">
-          <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+            {% if user.is_authenticated %}
+                <form action="{% url 'watch' listing.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Add to Watchlist" class="btn btn-primary btn-lg">
+                </form>
+            {% endif %}
         </p>
       </div>
 
