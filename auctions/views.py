@@ -91,8 +91,11 @@ def new(request):
 def listing(request, id):
     try:
         listing = Listing.objects.get(pk=id)
+        # Check if the current user has this item watchlisted
+        watchlisted = listing.users_watching.filter(pk=request.user.id).exists()
         return render(request, "auctions/listing.html", {
-            "listing": listing
+            "listing": listing,
+            "watchlisted": watchlisted
         })
     except:
         return render(request, "auctions/404.html")

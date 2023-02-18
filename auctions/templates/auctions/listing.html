@@ -22,10 +22,17 @@
         </div>
         <p class="lead">
             {% if user.is_authenticated %}
-                <form action="{% url 'watch' listing.id %}" method="post">
-                    {% csrf_token %}
-                    <input type="submit" value="Add to Watchlist" class="btn btn-primary btn-lg">
-                </form>
+                {% if watchlisted %}
+                    <form action="{% url 'unwatch' listing.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="Remove from Watchlist" class="btn btn-primary btn-lg">
+                    </form>
+                {% else %}
+                    <form action="{% url 'watch' listing.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="Add to Watchlist" class="btn btn-primary btn-lg">
+                    </form>
+                {% endif %}
             {% endif %}
         </p>
       </div>
