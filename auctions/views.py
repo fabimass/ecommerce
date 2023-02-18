@@ -11,7 +11,8 @@ from .forms import ListingForm
 def index(request):
     listings = Listing.objects.filter(is_active=True)
     return render(request, "auctions/index.html", {
-        "listings": listings
+        "listings": listings,
+        "title": "Active Listings"
     })
 
 
@@ -98,9 +99,11 @@ def listing(request, id):
 
 
 def watchlist(request):
-    listings = Listing.objects.filter(is_active=True)
-    return render(request, "auctions/watchlist.html", {
-        "listings": listings
+    current_user = request.user
+    listings = current_user.listings_watched.all()
+    return render(request, "auctions/index.html", {
+        "listings": listings,
+        "title": f"{current_user.username}'s Watchlist"
     })
 
 
@@ -108,5 +111,13 @@ def watch(request, id):
     if request.method == "POST":
         listing = Listing.objects.get(pk=id)
         listing.users_watching.add(request.user)
+
+    return HttpResponseRedirect(reverse("watchlist"))
+
+
+def unwatch(request, id):
+    if request.method == "POST":
+        listing = Listing.objects.get(pk=id)
+        listing.users_watching.remove(request.user)
 
     return HttpResponseRedirect(reverse("watchlist"))
