@@ -4,7 +4,11 @@
 {% block body %}
     <div class="jumbotron">
         <h1 class="display-4">{{ listing.title }}</h1>
-        <p class="lead">$ {{ listing.current_price }}</p>
+        {% if listing.current_bid %}
+            <p class="lead">$ {{ listing.current_bid.bid }}</p>
+        {% else %}  
+            <p class="lead">$ {{ listing.starting_price }}</p>
+        {% endif %}  
         <hr class="my-4">
         
         <div class="row my-5">
@@ -17,6 +21,17 @@
             </div>
             <div class="col-9">
                 <p>{{ listing.description }}</p>
+                <h6>Details:</h6>
+                <ul>
+                    <li>Category: {{ listing.category }}</li>
+                    <li>Listed by: {{ listing.listed_by }}</li>
+                    <li>Listed on: {{ listing.date }}</li>
+                    <li>Starting Price: ${{ listing.starting_price }}</li>
+                    <li>Current bids: {{ listing.bids_count }}</li>
+                    {% if listing.current_bid %}
+                        <li>Last bid: {{ listing.current_bid.bidded_by }} on {{ listing.current_bid.date }}</li>
+                    {% endif %}
+                </ul>
             </div>
         </div>
      

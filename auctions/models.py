@@ -20,13 +20,15 @@ class Listing(models.Model):
     def __str__(self):
         return f"{self.title}"
 
-    def current_price(self):
+    def current_bid(self):
         bids_list = Bid.objects.filter(item=self).order_by('-date')
         if len(bids_list) > 0 :
-            current_price = bids_list[0].bid
+            return bids_list[0]
         else:
-            current_price = self.starting_price 
-        return current_price
+            return None 
+
+    def bids_count(self):
+        return len(Bid.objects.filter(item=self))
 
 class Bid(models.Model):
     bid = models.DecimalField(max_digits=10, decimal_places=2)
