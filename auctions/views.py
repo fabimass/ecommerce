@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from .models import User, Listing
-from .forms import ListingForm
+from .forms import ListingForm, BidForm
 
 
 def index(request):
@@ -95,7 +95,8 @@ def listing(request, id):
         watchlisted = listing.users_watching.filter(pk=request.user.id).exists()
         return render(request, "auctions/listing.html", {
             "listing": listing,
-            "watchlisted": watchlisted
+            "watchlisted": watchlisted,
+            "form": BidForm()
         })
     except:
         return render(request, "auctions/404.html")

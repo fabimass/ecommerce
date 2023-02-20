@@ -14,3 +14,8 @@ class ListingForm(forms.Form):
         'class': 'form-control'}))
     description = forms.CharField(label="Description", required=True, widget=forms.Textarea(attrs={
         'class': 'form-control'}))
+
+class BidForm(forms.Form):
+    price = forms.DecimalField(label='', required=True, decimal_places=2, widget=forms.NumberInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'Bid'}))
