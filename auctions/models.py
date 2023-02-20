@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from datetime import datetime
 
 
 class User(AbstractUser):
@@ -16,15 +17,16 @@ class Listing(models.Model):
     users_watching = models.ManyToManyField(User, blank=True, related_name="listings_watched")
 
     def __str__(self):
-        return f"{self.id}: {self.title} - listed by {self.listed_by}"
+        return f"{self.title}"
 
 class Bid(models.Model):
     bid = models.DecimalField(max_digits=10, decimal_places=2)
     item = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="bids")
     bidded_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bids")
+    date = models.DateTimeField(default=datetime.now())
 
     def __str__(self):
-        return f"{self.item}: ${self.bid} by user {self.bidded_by}"
+        return f"${self.bid} - {self.bidded_by}"
 
 class Comment(models.Model):
     comment = models.CharField(max_length=500)

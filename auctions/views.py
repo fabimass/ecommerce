@@ -3,6 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from datetime import datetime
 
 from .models import User, Listing, Bid
 from .forms import ListingForm, BidForm
@@ -134,7 +135,8 @@ def bid(request, id):
             bid = Bid(
                 bid=form.cleaned_data["price"], 
                 item=Listing.objects.get(pk=id), 
-                bidded_by=request.user)
+                bidded_by=request.user,
+                date=datetime.now())
             bid.save()
 
     return HttpResponseRedirect(reverse("listing", args=[id]))
