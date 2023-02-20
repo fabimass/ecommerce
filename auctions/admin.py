@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import Listing, Bid, Comment, User
 
 class ListingAdmin(admin.ModelAdmin):
-    list_display = ("title", "price", "category", "listed_by", "is_active")
+    list_display = ("title", "price", "category", "listed_by", "date", "is_active")
     filter_horizontal = ("users_watching",)
 
 class BidAdmin(admin.ModelAdmin):

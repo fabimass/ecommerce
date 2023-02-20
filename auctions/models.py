@@ -15,6 +15,7 @@ class Listing(models.Model):
     listed_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings_owned")
     is_active = models.BooleanField(default=True)
     users_watching = models.ManyToManyField(User, blank=True, related_name="listings_watched")
+    date = models.DateTimeField(default=datetime.now())
 
     def __str__(self):
         return f"{self.title}"
