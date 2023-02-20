@@ -23,7 +23,7 @@
         {% if user.is_authenticated %}
             <div class="row my-2">
                 <div class="col-6">
-                    <form class="row" action="{% url 'bid' listing.id %}" method="post">
+                    <form class="row" action="{% url 'listing' listing.id %}" method="post">
                         {% csrf_token %}
                         <div class="col-8">
                             {{ form }}
@@ -31,7 +31,7 @@
                         <div class="col-4">
                             <input type="submit" value="Place Bid" class="btn btn-primary">
                         </div>
-                    </form>  
+                    </form> 
                 </div>
                 <div class="col-6 d-flex justify-content-end">
                     {% if watchlisted %}
@@ -47,6 +47,13 @@
                     {% endif %}
                 </div>
             </div>
+            
+            {% if bid_status == 'success' %}
+                <span style="color: green;">Hooray! Your bid was placed successfully!</span>
+            {% endif %}
+            {% if bid_status == 'fail' %}
+                <span style="color: red;">ERROR: Your bid has to be higher than the current bid!</span>
+            {% endif %} 
         {% endif %}
             
     </div>

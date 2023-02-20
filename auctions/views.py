@@ -94,11 +94,29 @@ def listing(request, id):
         listing = Listing.objects.get(pk=id)
         # Check if the current user has this item watchlisted
         watchlisted = listing.users_watching.filter(pk=request.user.id).exists()
-        return render(request, "auctions/listing.html", {
-            "listing": listing,
-            "watchlisted": watchlisted,
-            "form": BidForm()
-        })
+
+        if request.method == "POST":
+            form = BidForm(request.POST)
+            if form.is_valid():
+                bid = Bid(
+                    bid=form.cleaned_data["price"], 
+                    item=Listing.objects.get(pk=id), 
+                    bidded_by=request.user,
+                    date=datetime.now())
+                bid.save()
+                return render(request, "auctions/listing.html", {
+                    "listing": listing,
+                    "watchlisted": watchlisted,
+                    "form": BidForm(),
+                    "bid_status": "success" 
+                })
+    
+        else:
+            return render(request, "auctions/listing.html", {
+                "listing": listing,
+                "watchlisted": watchlisted,
+                "form": BidForm(), 
+            })
     except:
         return render(request, "auctions/404.html")
 
@@ -126,17 +144,3 @@ def unwatch(request, id):
         listing.users_watching.remove(request.user)
 
     return HttpResponseRedirect(reverse("watchlist"))
-
-
-def bid(request, id):
-    if request.method == "POST":
-        form = BidForm(request.POST)
-        if form.is_valid():
-            bid = Bid(
-                bid=form.cleaned_data["price"], 
-                item=Listing.objects.get(pk=id), 
-                bidded_by=request.user,
-                date=datetime.now())
-            bid.save()
-
-    return HttpResponseRedirect(reverse("listing", args=[id]))
