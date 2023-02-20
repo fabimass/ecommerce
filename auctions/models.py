@@ -21,9 +21,10 @@ class Listing(models.Model):
 class Bid(models.Model):
     bid = models.DecimalField(max_digits=10, decimal_places=2)
     item = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="bids")
+    bidded_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bids")
 
     def __str__(self):
-        return f"{self.item}: ${self.bid}"
+        return f"{self.item}: ${self.bid} by user {self.bidded_by}"
 
 class Comment(models.Model):
     comment = models.CharField(max_length=500)

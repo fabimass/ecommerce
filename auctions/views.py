@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Listing
+from .models import User, Listing, Bid
 from .forms import ListingForm, BidForm
 
 
@@ -125,3 +125,16 @@ def unwatch(request, id):
         listing.users_watching.remove(request.user)
 
     return HttpResponseRedirect(reverse("watchlist"))
+
+
+def bid(request, id):
+    if request.method == "POST":
+        form = BidForm(request.POST)
+        if form.is_valid():
+            bid = Bid(
+                bid=form.cleaned_data["price"], 
+                item=Listing.objects.get(pk=id), 
+                bidded_by=request.user)
+            bid.save()
+
+    return HttpResponseRedirect(reverse("listing", args=[id]))
