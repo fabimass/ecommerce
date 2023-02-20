@@ -75,7 +75,7 @@ def new(request):
         if form.is_valid():
             listing = Listing(
                 title=form.cleaned_data["title"], 
-                price=form.cleaned_data["price"], 
+                starting_price=form.cleaned_data["price"], 
                 category=form.cleaned_data["category"],
                 description=form.cleaned_data["description"],
                 image=form.cleaned_data["image"],
@@ -98,18 +98,30 @@ def listing(request, id):
         if request.method == "POST":
             form = BidForm(request.POST)
             if form.is_valid():
-                bid = Bid(
-                    bid=form.cleaned_data["price"], 
-                    item=Listing.objects.get(pk=id), 
-                    bidded_by=request.user,
-                    date=datetime.now())
-                bid.save()
-                return render(request, "auctions/listing.html", {
-                    "listing": listing,
-                    "watchlisted": watchlisted,
-                    "form": BidForm(),
-                    "bid_status": "success" 
-                })
+                price_bidded = form.cleaned_data["price"]
+                bids_list = listing.bids.all()
+
+                # The bid must be at least as large as the starting bid, 
+                # and must be greater than any other bids that have been placed (if any)
+                
+                if ( len(bids_list) > 0 and price_bidded > bids_list[len(bids_list)-1].bid ) or ( len(bids_list) == 0 and price_bidded >= listing.starting_price ): 
+                    new_bid = Bid(
+                            bid=price_bidded, 
+                            item=Listing.objects.get(pk=id), 
+                            bidded_by=request.user,
+                            date=datetime.now())
+                    new_bid.save()
+                    bid_status = "success"
+
+                else:
+                    bid_status = "fail"
+            
+            return render(request, "auctions/listing.html", {
+                            "listing": listing,
+                            "watchlisted": watchlisted,
+                            "form": BidForm(),
+                            "bid_status": bid_status 
+                        })
     
         else:
             return render(request, "auctions/listing.html", {
