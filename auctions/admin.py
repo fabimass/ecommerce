@@ -5,8 +5,11 @@ class ListingAdmin(admin.ModelAdmin):
     list_display = ("title", "price", "category", "listed_by", "is_active")
     filter_horizontal = ("users_watching",)
 
+class BidAdmin(admin.ModelAdmin):
+    list_display = ("item", "bid", "bidded_by")
+
 # Register your models here.
 admin.site.register(Listing, ListingAdmin)
-admin.site.register(Bid)
+admin.site.register(Bid, BidAdmin)
 admin.site.register(Comment)
 admin.site.register(User)
