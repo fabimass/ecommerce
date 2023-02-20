@@ -20,6 +20,14 @@ class Listing(models.Model):
     def __str__(self):
         return f"{self.title}"
 
+    def current_price(self):
+        bids_list = Bid.objects.filter(item=self).order_by('-date')
+        if len(bids_list) > 0 :
+            current_price = bids_list[0].bid
+        else:
+            current_price = self.starting_price 
+        return current_price
+
 class Bid(models.Model):
     bid = models.DecimalField(max_digits=10, decimal_places=2)
     item = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="bids")
