@@ -38,11 +38,13 @@ class Bid(models.Model):
     date = models.DateTimeField()
 
     def __str__(self):
-        return f"${self.bid} - {self.bidded_by}"
+        return f"${self.bid} - {self.bidded_by} on {self.item}"
 
 class Comment(models.Model):
     comment = models.CharField(max_length=500)
     item = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="comments")
+    commented_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
+    date = models.DateTimeField()
 
     def __str__(self):
-        return f"{self.item}: {self.comment}"
+        return f"{self.comment} - {self.commented_by} on {self.item}"

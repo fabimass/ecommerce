@@ -48,7 +48,7 @@
                             <form class="row" action="{% url 'listing' listing.id %}" method="post">
                                 {% csrf_token %}
                                 <div class="col-8">
-                                    {{ form }}
+                                    {{ bid_form }}
                                 </div>
                                 <div class="col-4">
                                     <input type="submit" value="Place Bid" class="btn btn-primary">
@@ -96,6 +96,15 @@
                     This auction is no longer active
                 </div>
             {% endif %}
+
+            <hr class="my-4">
+            <form action="{% url 'comment' listing.id %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ message_form }}
+                </div>
+                <input type="submit" value="Submit" class="btn btn-primary"> 
+            </form>
 
         {% endif %}
             

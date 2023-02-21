@@ -19,3 +19,9 @@ class BidForm(forms.Form):
     price = forms.DecimalField(label='', required=True, decimal_places=2, widget=forms.NumberInput(attrs={
         'class': 'form-control',
         'placeholder': 'Bid'}))
+
+class MessageForm(forms.Form):
+    message = forms.CharField(label='', required=True, widget=forms.Textarea(attrs={
+        'class': 'form-control',
+        'placeholder': 'Add new message',
+        'style': 'height: 120px'}))

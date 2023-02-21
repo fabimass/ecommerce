@@ -5,8 +5,8 @@ from django.shortcuts import render
 from django.urls import reverse
 from datetime import datetime
 
-from .models import User, Listing, Bid
-from .forms import ListingForm, BidForm
+from .models import User, Listing, Bid, Comment
+from .forms import ListingForm, BidForm, MessageForm
 
 
 def index(request):
@@ -120,15 +120,17 @@ def listing(request, id):
             return render(request, "auctions/listing.html", {
                             "listing": listing,
                             "watchlisted": watchlisted,
-                            "form": BidForm(),
-                            "bid_status": bid_status 
+                            "bid_form": BidForm(),
+                            "bid_status": bid_status,
+                            "message_form": MessageForm() 
                         })
     
         else:
             return render(request, "auctions/listing.html", {
                 "listing": listing,
                 "watchlisted": watchlisted,
-                "form": BidForm(), 
+                "bid_form": BidForm(), 
+                "message_form": MessageForm()
             })
     except:
         return render(request, "auctions/404.html")
@@ -168,5 +170,20 @@ def close(request, id):
             if listing.current_bid():
                 listing.winner = listing.current_bid().bidded_by
             listing.save()
+
+    return HttpResponseRedirect(reverse("listing", args=[id]))
+
+
+def comment(request, id):
+    if request.method == "POST":
+        listing = Listing.objects.get(pk=id)
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = Comment(
+                comment=form.cleaned_data["message"], 
+                item=listing,
+                commented_by=request.user,
+                date=datetime.now())
+            message.save()
 
     return HttpResponseRedirect(reverse("listing", args=[id]))
