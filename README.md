@@ -1,3 +1,3 @@
-This is a site where users can list items for sale and bid on listed items.
+An e-commerce auction site that will allow users to post auction listings, place bids on listings, comment on those listings, and add listings to a “watchlist”.
 
 I built this using Django and Bootstrap.
