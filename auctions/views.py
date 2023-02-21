@@ -157,3 +157,14 @@ def unwatch(request, id):
         listing.users_watching.remove(request.user)
 
     return HttpResponseRedirect(reverse("watchlist"))
+
+
+def close(request, id):
+    if request.method == "POST":
+        listing = Listing.objects.get(pk=id)
+        # Only the user who created the listing can close it
+        if request.user == listing.listed_by:
+            listing.is_active = False
+            listing.save()
+
+    return HttpResponseRedirect(reverse("listing", args=[id]))

@@ -38,24 +38,31 @@
         {% if user.is_authenticated %}
             <div class="row my-2">
                 <div class="col-6">
-                    <form class="row" action="{% url 'listing' listing.id %}" method="post">
-                        {% csrf_token %}
-                        <div class="col-8">
-                            {{ form }}
-                        </div>
-                        <div class="col-4">
-                            <input type="submit" value="Place Bid" class="btn btn-primary">
-                        </div>
-                    </form> 
+                    {% if request.user == listing.listed_by %}
+                        <form action="{% url 'close' listing.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="Close Auction" class="btn btn-primary">
+                        </form>
+                    {% else %}
+                        <form class="row" action="{% url 'listing' listing.id %}" method="post">
+                            {% csrf_token %}
+                            <div class="col-8">
+                                {{ form }}
+                            </div>
+                            <div class="col-4">
+                                <input type="submit" value="Place Bid" class="btn btn-primary">
+                            </div>
+                        </form> 
+                    {% endif %}
                 </div>
                 <div class="col-6 d-flex justify-content-end">
                     {% if watchlisted %}
-                        <form class="row" action="{% url 'unwatch' listing.id %}" method="post">
+                        <form action="{% url 'unwatch' listing.id %}" method="post">
                             {% csrf_token %}
                             <input type="submit" value="Remove from Watchlist" class="btn btn-primary">
                         </form>
                     {% else %}
-                        <form class="row" action="{% url 'watch' listing.id %}" method="post">
+                        <form action="{% url 'watch' listing.id %}" method="post">
                             {% csrf_token %}
                             <input type="submit" value="Add to Watchlist" class="btn btn-primary">
                         </form>
