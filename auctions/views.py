@@ -165,6 +165,8 @@ def close(request, id):
         # Only the user who created the listing can close it
         if request.user == listing.listed_by:
             listing.is_active = False
+            if listing.current_bid():
+                listing.winner = listing.current_bid().bidded_by
             listing.save()
 
     return HttpResponseRedirect(reverse("listing", args=[id]))

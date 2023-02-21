@@ -10,12 +10,13 @@ class Listing(models.Model):
     title = models.CharField(max_length=64)
     starting_price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.CharField(max_length=500)
-    category = models.CharField(max_length=64, default="Other")
-    image = models.URLField(blank=True)
+    category = models.CharField(max_length=64, blank=True, null=True)
+    image = models.URLField(blank=True, null=True)
     listed_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings_owned")
+    date = models.DateTimeField()
     is_active = models.BooleanField(default=True)
     users_watching = models.ManyToManyField(User, blank=True, related_name="listings_watched")
-    date = models.DateTimeField()
+    winner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="auctions_won", blank=True, null=True)
 
     def __str__(self):
         return f"{self.title}"

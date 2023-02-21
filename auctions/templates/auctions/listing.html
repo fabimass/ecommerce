@@ -9,9 +9,6 @@
         {% else %}  
             <p class="lead">$ {{ listing.starting_price }}</p>
         {% endif %}
-        {% if listing.is_active == False %} 
-            <p>This auction is no longer active</p> 
-        {% endif %}
         <hr class="my-4">
         
         <div class="row my-5">
@@ -38,47 +35,68 @@
             </div>
         </div>
      
-        {% if user.is_authenticated and listing.is_active %}
-            <div class="row my-2">
-                <div class="col-6">
-                    {% if request.user == listing.listed_by %}
-                        <form action="{% url 'close' listing.id %}" method="post">
-                            {% csrf_token %}
-                            <input type="submit" value="Close Auction" class="btn btn-primary">
-                        </form>
-                    {% else %}
-                        <form class="row" action="{% url 'listing' listing.id %}" method="post">
-                            {% csrf_token %}
-                            <div class="col-8">
-                                {{ form }}
-                            </div>
-                            <div class="col-4">
-                                <input type="submit" value="Place Bid" class="btn btn-primary">
-                            </div>
-                        </form> 
-                    {% endif %}
+        {% if user.is_authenticated %}
+            {% if listing.is_active %}
+                <div class="row my-2">
+                    <div class="col-6">
+                        {% if request.user == listing.listed_by %}
+                            <form action="{% url 'close' listing.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="submit" value="Close Auction" class="btn btn-primary">
+                            </form>
+                        {% else %}
+                            <form class="row" action="{% url 'listing' listing.id %}" method="post">
+                                {% csrf_token %}
+                                <div class="col-8">
+                                    {{ form }}
+                                </div>
+                                <div class="col-4">
+                                    <input type="submit" value="Place Bid" class="btn btn-primary">
+                                </div>
+                            </form> 
+                        {% endif %}
+                    </div>
+                    <div class="col-6 d-flex justify-content-end">
+                        {% if watchlisted %}
+                            <form action="{% url 'unwatch' listing.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="submit" value="Remove from Watchlist" class="btn btn-primary">
+                            </form>
+                        {% else %}
+                            <form action="{% url 'watch' listing.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="submit" value="Add to Watchlist" class="btn btn-primary">
+                            </form>
+                        {% endif %}
+                    </div>
                 </div>
-                <div class="col-6 d-flex justify-content-end">
-                    {% if watchlisted %}
-                        <form action="{% url 'unwatch' listing.id %}" method="post">
-                            {% csrf_token %}
-                            <input type="submit" value="Remove from Watchlist" class="btn btn-primary">
-                        </form>
-                    {% else %}
-                        <form action="{% url 'watch' listing.id %}" method="post">
-                            {% csrf_token %}
-                            <input type="submit" value="Add to Watchlist" class="btn btn-primary">
-                        </form>
-                    {% endif %}
-                </div>
-            </div>
-            
-            {% if bid_status == 'success' %}
-                <span style="color: green;">Hooray! Your bid was placed successfully!</span>
             {% endif %}
+            
+            <!-- Messages -->
+            {% if bid_status == 'success' %}
+                <div class="alert alert-success my-2" role="alert">
+                    Hooray! Your bid was placed successfully!
+                </div>
+            {% endif %}
+            
             {% if bid_status == 'fail' %}
-                <span style="color: red;">ERROR: Your bid is too low!</span>
+                <div class="alert alert-danger my-2" role="alert">
+                    ERROR: Your bid is too low!
+                </div>
             {% endif %} 
+            
+            {% if listing.winner == request.user %}
+                <div class="alert alert-success my-2" role="alert">
+                    Congrats! Your bid was the highest and you won this auction!
+                </div>
+            {% endif %}
+
+            {% if listing.is_active == False %}
+                <div class="alert alert-secondary my-2" role="alert">
+                    This auction is no longer active
+                </div>
+            {% endif %}
+
         {% endif %}
             
     </div>
