@@ -189,3 +189,18 @@ def comment(request, id):
             message.save()
 
     return HttpResponseRedirect(reverse("listing", args=[id]))
+
+
+def categories(request):
+    categories_list = Listing.objects.filter(is_active=True).values("category").distinct()
+    return render(request, "auctions/categories.html", {
+        "categories": categories_list
+    })
+
+
+def category(request, category):
+    listings = Listing.objects.filter(is_active=True, category=category)
+    return render(request, "auctions/index.html", {
+        "listings": listings,
+        "title": f"Category: {category}"
+    })
