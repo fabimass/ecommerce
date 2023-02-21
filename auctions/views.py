@@ -79,7 +79,8 @@ def new(request):
                 category=form.cleaned_data["category"],
                 description=form.cleaned_data["description"],
                 image=form.cleaned_data["image"],
-                listed_by=request.user)
+                listed_by=request.user,
+                date=datetime.now())
             listing.save()
             return HttpResponseRedirect(reverse("index"))
 
