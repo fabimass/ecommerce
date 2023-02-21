@@ -101,12 +101,26 @@
             <form action="{% url 'comment' listing.id %}" method="post">
                 {% csrf_token %}
                 <div class="form-group">
-                    {{ message_form }}
+                    {{ comment_form }}
                 </div>
-                <input type="submit" value="Submit" class="btn btn-primary"> 
+                <div class="d-flex justify-content-end">
+                    <input type="submit" value="Submit" class="btn btn-primary">
+                </div> 
             </form>
 
         {% endif %}
+        
+        {% for comment in comments %}
+            <div class="card my-4">
+                <div class="card-header">
+                    {{ comment.commented_by }}
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ comment.comment }}</p>
+                    <p><small>{{ comment.date }}</small></p>
+                </div>
+            </div>
+        {% endfor %}
             
     </div>
 {% endblock %}

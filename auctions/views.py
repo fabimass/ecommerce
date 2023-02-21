@@ -122,7 +122,8 @@ def listing(request, id):
                             "watchlisted": watchlisted,
                             "bid_form": BidForm(),
                             "bid_status": bid_status,
-                            "message_form": MessageForm() 
+                            "comment_form": MessageForm(),
+                            "comments": listing.comments.all() 
                         })
     
         else:
@@ -130,7 +131,8 @@ def listing(request, id):
                 "listing": listing,
                 "watchlisted": watchlisted,
                 "bid_form": BidForm(), 
-                "message_form": MessageForm()
+                "comment_form": MessageForm(),
+                "comments": listing.comments.all() 
             })
     except:
         return render(request, "auctions/404.html")
