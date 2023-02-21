@@ -76,7 +76,7 @@ def new(request):
             listing = Listing(
                 title=form.cleaned_data["title"], 
                 starting_price=form.cleaned_data["price"], 
-                category=form.cleaned_data["category"],
+                category=form.cleaned_data["category"] if form.cleaned_data["category"] != "" else "No category provided",
                 description=form.cleaned_data["description"],
                 image=form.cleaned_data["image"],
                 listed_by=request.user,
